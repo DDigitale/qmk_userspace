@@ -133,26 +133,19 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     }
     return mouse_report;
 }
-#endif
 
-// void matrix_scan_user(void) {
-//     if (auto_pointer_layer_timer != 0 && TIMER_DIFF_16(timer_read(), auto_pointer_layer_timer) >= CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_TIMEOUT_MS) {
-//         auto_pointer_layer_timer = 0;
-//         layer_off(LAYER_POINTER);
-// #        ifdef RGB_MATRIX_ENABLE
-//         rgb_matrix_mode_noeeprom(RGB_MATRIX_DEFAULT_MODE);
-// #        endif // RGB_MATRIX_ENABLE
-//     }
-// }
-// #    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
+void matrix_scan_user(void) {
+    if (auto_pointer_layer_timer != 0 && TIMER_DIFF_16(timer_read(), auto_pointer_layer_timer) >= CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_TIMEOUT_MS) {
+        auto_pointer_layer_timer = 0;
+        layer_off(LAYER_POINTER);
+#        ifdef RGB_MATRIX_ENABLE
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_DEFAULT_MODE);
+#        endif // RGB_MATRIX_ENABLE
+    }
+}
+#    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
-//#    ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
-//layer_state_t layer_state_set_user(layer_state_t state) {
-//    charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
-//    return state;
-//}
-//#    endif // CHARYBDIS_AUTO_SNIPING_ON_LAYER
-//#endif     // POINTING_DEVICE_ENABLE
+#endif     // POINTING_DEVICE_ENABLE
 
 #ifdef RGB_MATRIX_ENABLE
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
@@ -176,7 +169,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             rgb_matrix_sethsv_noeeprom(HSV_GREEN);   // Зелёный для POINTER слоя
             break;
         default:
-            rgb_matrix_reload_from_eeprom();
+            rgb_matrix_reload_from_eeprom)();
             break;
     }
 
