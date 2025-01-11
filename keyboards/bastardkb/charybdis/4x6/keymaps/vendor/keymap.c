@@ -159,24 +159,16 @@ void rgb_matrix_update_pwm_buffers(void);
 #endif
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    uint8_t layer = get_highest_layer(layer_state);
-
-    dprintf("Active layer: %d\n", layer); // Отладка текущего слоя
-
-    if (layer > 0) {
-        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-                uint8_t index = g_led_config.matrix_co[row][col];
-
-                // Вывод отладочной информации
-                dprintf("Row: %d, Col: %d, LED Index: %d\n", row, col, index);
-
-                if (index != NO_LED && index >= led_min && index < led_max) {
-                    if (keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
-                        rgb_matrix_set_color(index, RGB_GREEN);
-                    }
-                }
-            }
+    for (uint8_t i = led_min; i < led_max; i++) {
+        switch(get_highest_layer(layer_state|default_layer_state)) {
+            case 2:
+                rgb_matrix_set_color(i, RGB_BLUE);
+                break;
+            case 1:
+                rgb_matrix_set_color(i, RGB_YELLOW);
+                break;
+            default:
+                break;
         }
     }
     return false;
