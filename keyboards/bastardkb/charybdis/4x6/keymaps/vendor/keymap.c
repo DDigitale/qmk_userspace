@@ -158,53 +158,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void rgb_matrix_update_pwm_buffers(void);
 #endif
 
-#include "rgb_matrix.h"
-
-// Переменные для хранения предыдущего состояния подсветки
-static uint8_t saved_mode = RGB_MATRIX_NONE;
-static uint8_t saved_hue = 0;
-static uint8_t saved_sat = 0;
-static uint8_t saved_val = 0;
-
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t active_layer = get_highest_layer(state);
 
     switch (active_layer) {
         case LAYER_LOWER:
-            // Сохраняем текущее состояние перед изменением
-            if (saved_mode == RGB_MATRIX_NONE) {
-                saved_mode = rgb_matrix_get_mode();
-                rgb_matrix_get_hsv(&saved_hue, &saved_sat, &saved_val);
-            }
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
             rgb_matrix_sethsv_noeeprom(HSV_YELLOW);  // Жёлтый для LOWER слоя
             break;
-
         case LAYER_RAISE:
-            if (saved_mode == RGB_MATRIX_NONE) {
-                saved_mode = rgb_matrix_get_mode();
-                rgb_matrix_get_hsv(&saved_hue, &saved_sat, &saved_val);
-            }
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
             rgb_matrix_sethsv_noeeprom(HSV_BLUE);    // Синий для RAISE слоя
             break;
-
         case LAYER_POINTER:
-            if (saved_mode == RGB_MATRIX_NONE) {
-                saved_mode = rgb_matrix_get_mode();
-                rgb_matrix_get_hsv(&saved_hue, &saved_sat, &saved_val);
-            }
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
             rgb_matrix_sethsv_noeeprom(HSV_GREEN);   // Зелёный для POINTER слоя
             break;
-
         default:
-            // Возвращаем ранее сохранённое состояние
-            if (saved_mode != RGB_MATRIX_NONE) {
-                rgb_matrix_mode_noeeprom(saved_mode);
-                rgb_matrix_sethsv_noeeprom(saved_hue, saved_sat, saved_val);
-                saved_mode = RGB_MATRIX_NONE;  // Сбрасываем сохранённое состояние
-            }
+            rgb_matrix_reload_from_eeprom();
             break;
     }
 
