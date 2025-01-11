@@ -161,25 +161,23 @@ void rgb_matrix_update_pwm_buffers(void);
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t active_layer = get_highest_layer(layer_state);
 
-    for (uint8_t i = led_min; i < led_max; i++) {
-        // Проверка индекса LED
-        dprintf("LED Index: %d, Active Layer: %d\n", i, active_layer);
-
-        // Настройка цвета в зависимости от слоя
-        switch (active_layer) {
-            case LAYER_LOWER:
-                rgb_matrix_set_color(i, RGB_YELLOW);  // Жёлтый для LAYER_LOWER
-                break;
-            case LAYER_RAISE:
-                rgb_matrix_set_color(i, RGB_BLUE);    // Синий для LAYER_RAISE
-                break;
-            case LAYER_POINTER:
-                rgb_matrix_set_color(i, RGB_GREEN);  // Зелёный для LAYER_POINTER
-                break;
-            default:
-                rgb_matrix_set_color(i, 0, 0, 0);    // Выключить свет
-                break;
-        }
+    switch (active_layer) {
+        case LAYER_LOWER:
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);  // Жёлтый для LOWER слоя
+            break;
+        case LAYER_RAISE:
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+            rgb_matrix_sethsv_noeeprom(HSV_BLUE);    // Синий для RAISE слоя
+            break;
+        case LAYER_POINTER:
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+            rgb_matrix_sethsv_noeeprom(HSV_GREEN);   // Зелёный для POINTER слоя
+            break;
+        default:
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_NONE); // Выключить подсветку
+            break;
     }
-    return false;
+
+    return false; // Оставляем false, чтобы другие функции могли перезаписывать подсветку
 }
