@@ -16,6 +16,8 @@
  */
 #pragma once
 
+#define SPLIT_LAYER_STATE_ENABLE
+
 #ifdef VIA_ENABLE
 /* VIA configuration. */
 #    define DYNAMIC_KEYMAP_LAYER_COUNT 4
