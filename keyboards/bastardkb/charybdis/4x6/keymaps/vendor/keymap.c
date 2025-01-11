@@ -159,19 +159,21 @@ void rgb_matrix_update_pwm_buffers(void);
 #endif
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    // Проверяем, есть ли активные слои
     uint8_t layer = get_highest_layer(layer_state);
+
+    dprintf("Active layer: %d\n", layer); // Отладка текущего слоя
+
     if (layer > 0) {
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
             for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-                // Получаем индекс LED для текущей позиции матрицы
                 uint8_t index = g_led_config.matrix_co[row][col];
 
-                // Проверяем, что индекс LED валиден и находится в пределах
+                // Вывод отладочной информации
+                dprintf("Row: %d, Col: %d, LED Index: %d\n", row, col, index);
+
                 if (index != NO_LED && index >= led_min && index < led_max) {
-                    // Проверяем, что клавиша на этом слое не прозрачная
                     if (keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
-                        rgb_matrix_set_color(index, RGB_GREEN);  // Устанавливаем зелёный цвет
+                        rgb_matrix_set_color(index, RGB_GREEN);
                     }
                 }
             }
