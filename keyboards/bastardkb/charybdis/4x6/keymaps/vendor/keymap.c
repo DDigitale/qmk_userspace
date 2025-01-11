@@ -158,8 +158,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 void rgb_matrix_update_pwm_buffers(void);
 #endif
 
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    uint8_t active_layer = get_highest_layer(layer_state);
+layer_state_t layer_state_set_user(layer_state_t state) {
+    uint8_t active_layer = get_highest_layer(state);
 
     switch (active_layer) {
         case LAYER_LOWER:
@@ -175,9 +175,9 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_sethsv_noeeprom(HSV_GREEN);   // Зелёный для POINTER слоя
             break;
         default:
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_NONE); // Выключить подсветку
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_DEFAULT_MODE); // Возвращаем стандартную подсветку
             break;
     }
 
-    return false; // Оставляем false, чтобы другие функции могли перезаписывать подсветку
+    return state;
 }
