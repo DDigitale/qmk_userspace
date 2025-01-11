@@ -16,8 +16,6 @@
  */
 #pragma once
 
-#define SPLIT_LAYER_STATE_ENABLE
-
 #ifdef VIA_ENABLE
 /* VIA configuration. */
 #    define DYNAMIC_KEYMAP_LAYER_COUNT 4
@@ -29,6 +27,8 @@
 #endif // __arm__
 
 /* Charybdis-specific features. */
+
+#define SPLIT_LED_STATE_ENABLE
 
 #ifdef POINTING_DEVICE_ENABLE
 // Automatically enable the pointer layer when moving the trackball.  See also:
