@@ -159,15 +159,25 @@ void rgb_matrix_update_pwm_buffers(void);
 #endif
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    uint8_t active_layer = get_highest_layer(layer_state);
+
     for (uint8_t i = led_min; i < led_max; i++) {
-        switch(get_highest_layer(layer_state|default_layer_state)) {
-            case 2:
-                rgb_matrix_set_color(i, RGB_BLUE);
+        // Проверка индекса LED
+        dprintf("LED Index: %d, Active Layer: %d\n", i, active_layer);
+
+        // Настройка цвета в зависимости от слоя
+        switch (active_layer) {
+            case LAYER_LOWER:
+                rgb_matrix_set_color(i, RGB_YELLOW);  // Жёлтый для LAYER_LOWER
                 break;
-            case 1:
-                rgb_matrix_set_color(i, RGB_YELLOW);
+            case LAYER_RAISE:
+                rgb_matrix_set_color(i, RGB_BLUE);    // Синий для LAYER_RAISE
+                break;
+            case LAYER_POINTER:
+                rgb_matrix_set_color(i, RGB_GREEN);  // Зелёный для LAYER_POINTER
                 break;
             default:
+                rgb_matrix_set_color(i, 0, 0, 0);    // Выключить свет
                 break;
         }
     }
