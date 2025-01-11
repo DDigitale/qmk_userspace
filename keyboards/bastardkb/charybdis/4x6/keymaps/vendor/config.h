@@ -19,6 +19,7 @@
 #ifdef VIA_ENABLE
 /* VIA configuration. */
 #    define DYNAMIC_KEYMAP_LAYER_COUNT 4
+#    define SPLIT_LAYER_STATE_ENABLE
 #endif // VIA_ENABLE
 
 #ifndef __arm__
