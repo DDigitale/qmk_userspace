@@ -125,9 +125,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     switch (active_layer) {
         case LAYER_LOWER:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(RGB_SPRINGGREEN);
+            rgb_matrix_sethsv_noeeprom(HSV_SPRINGGREEN);
             break;
-        case LAYER_RAISE:
+        case LAYER_RAISE:3
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
             rgb_matrix_sethsv_noeeprom(HSV_CORAL);
             break;
