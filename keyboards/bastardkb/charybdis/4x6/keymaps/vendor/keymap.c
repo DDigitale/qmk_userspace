@@ -119,7 +119,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // clang-format on
 
 #ifdef POINTING_DEVICE_ENABLE
-
 #    ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     if (abs(mouse_report.x) > CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD || abs(mouse_report.y) > CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD) {
@@ -146,6 +145,12 @@ void matrix_scan_user(void) {
 }
 #    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
+#    ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
+layer_state_t layer_state_set_user(layer_state_t state) {
+    charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
+    return state;
+}
+#    endif // CHARYBDIS_AUTO_SNIPING_ON_LAYER
 #endif     // POINTING_DEVICE_ENABLE
 
 #ifdef RGB_MATRIX_ENABLE
@@ -153,6 +158,9 @@ void matrix_scan_user(void) {
 void rgb_matrix_update_pwm_buffers(void);
 #endif
 
+#ifdef RGB_MATRIX_ENABLE
+
+// Функция для установки цвета подсветки в зависимости от слоя
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t active_layer = get_highest_layer(state);
 
@@ -166,14 +174,43 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             rgb_matrix_sethsv_noeeprom(HSV_BLUE);    // Синий для RAISE слоя
             break;
         case LAYER_POINTER:
-            charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
             rgb_matrix_sethsv_noeeprom(HSV_GREEN);   // Зелёный для POINTER слоя
             break;
         default:
-            rgb_matrix_reload_from_eeprom();
+            rgb_matrix_reload_from_eeprom();  // Восстановить настройки по умолчанию для других слоев
             break;
     }
 
+    // Функция для изменения подсветки клавиш в зависимости от слоя
+    rgb_matrix_set_key_layer(active_layer);
+
     return state;
 }
+
+// Функция для настройки подсветки клавиш для активного слоя
+void rgb_matrix_set_key_layer(uint8_t layer) {
+    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+        for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+            uint8_t index = g_led_config.matrix_co[row][col];
+
+            if (index != NO_LED) {
+                switch (layer) {
+                    case LAYER_LOWER:
+                        rgb_matrix_set_color(index, RGB_YELLOW);  // Жёлтый для LOWER слоя
+                        break;
+                    case LAYER_RAISE:
+                        rgb_matrix_set_color(index, RGB_BLUE);    // Синий для RAISE слоя
+                        break;
+                    case LAYER_POINTER:
+                        rgb_matrix_set_color(index, RGB_GREEN);   // Зелёный для POINTER слоя
+                        break;
+                    default:
+                        rgb_matrix_set_color(index, RGB_OFF);     // Отключаем подсветку для других слоев
+                        break;
+                }
+            }
+        }
+    }
+}
+#endif // RGB_MATRIX_ENABLE
