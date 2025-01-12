@@ -117,7 +117,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 // clang-format on
-
 #ifdef RGB_MATRIX_ENABLE
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t active_layer = get_highest_layer(state);
@@ -145,10 +144,18 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     // Включаем подсветку только для клавиш активного слоя
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         for (uint8_t j = 0; j < MATRIX_COLS; j++) {
+            // Проверяем, активен ли слой для данной клавиши
             if (IS_LAYER_ON(active_layer)) {
-                rgb_matrix_set_color(i, j, rgb_matrix_gethsv()); // Включаем подсветку для активной клавиши
+                // Получаем цвет для этой клавиши
+                uint8_t red = rgb_matrix_get_hsv()[0];
+                uint8_t green = rgb_matrix_get_hsv()[1];
+                uint8_t blue = rgb_matrix_get_hsv()[2];
+
+                // Включаем подсветку для активной клавиши
+                rgb_matrix_set_color(i * MATRIX_COLS + j, red, green, blue);
             } else {
-                rgb_matrix_set_color(i, j, 0, 0, 0); // Отключаем подсветку для неактивной клавиши
+                // Отключаем подсветку для неактивной клавиши
+                rgb_matrix_set_color(i * MATRIX_COLS + j, 0, 0, 0);
             }
         }
     }
