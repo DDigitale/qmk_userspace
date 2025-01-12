@@ -126,20 +126,20 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     rgb_matrix_sethsv_noeeprom(HSV_BLACK);  // Сначала делаем все клавиши черными
 
     // Подсветка для активного слоя
-    switch (active_layer) {
-        case LAYER_LOWER:
-            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
-            break;
-        case LAYER_RAISE:
-            rgb_matrix_sethsv_noeeprom(HSV_BLUE);
-            break;
-        case LAYER_POINTER:
-            rgb_matrix_sethsv_noeeprom(HSV_GREEN);
-            break;
-        default:
-            rgb_matrix_reload_from_eeprom();
-            break;
-    }
+    // switch (active_layer) {
+    //     case LAYER_LOWER:
+    //         rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+    //         break;
+    //     case LAYER_RAISE:
+    //         rgb_matrix_sethsv_noeeprom(HSV_BLUE);
+    //         break;
+    //     case LAYER_POINTER:
+    //         rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+    //         break;
+    //     default:
+    //         rgb_matrix_reload_from_eeprom();
+    //         break;
+    // }
 
     // Включаем подсветку только для клавиш активного слоя
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
