@@ -159,36 +159,35 @@ void rgb_matrix_update_pwm_buffers(void);
 #endif
 
 #ifdef RGB_MATRIX_ENABLE
+// Declare rgb_matrix_set_key_layer before it's used
+void rgb_matrix_set_key_layer(uint8_t layer);
 
-// Функция для установки цвета подсветки в зависимости от слоя
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t active_layer = get_highest_layer(state);
 
     switch (active_layer) {
         case LAYER_LOWER:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);  // Жёлтый для LOWER слоя
+            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);  // Yellow for LOWER layer
             break;
         case LAYER_RAISE:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_BLUE);    // Синий для RAISE слоя
+            rgb_matrix_sethsv_noeeprom(HSV_BLUE);    // Blue for RAISE layer
             break;
         case LAYER_POINTER:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_GREEN);   // Зелёный для POINTER слоя
+            rgb_matrix_sethsv_noeeprom(HSV_GREEN);   // Green for POINTER layer
             break;
         default:
-            rgb_matrix_reload_from_eeprom();  // Восстановить настройки по умолчанию для других слоев
+            rgb_matrix_reload_from_eeprom();  // Restore default settings for other layers
             break;
     }
 
-    // Функция для изменения подсветки клавиш в зависимости от слоя
-    rgb_matrix_set_key_layer(active_layer);
+    rgb_matrix_set_key_layer(active_layer);  // Adjust RGB per key
 
     return state;
 }
 
-// Функция для настройки подсветки клавиш для активного слоя
 void rgb_matrix_set_key_layer(uint8_t layer) {
     for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
         for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
@@ -197,20 +196,20 @@ void rgb_matrix_set_key_layer(uint8_t layer) {
             if (index != NO_LED) {
                 switch (layer) {
                     case LAYER_LOWER:
-                        rgb_matrix_set_color(index, RGB_YELLOW);  // Жёлтый для LOWER слоя
+                        rgb_matrix_set_color(index, RGB_YELLOW);  // Yellow for LOWER layer
                         break;
                     case LAYER_RAISE:
-                        rgb_matrix_set_color(index, RGB_BLUE);    // Синий для RAISE слоя
+                        rgb_matrix_set_color(index, RGB_BLUE);    // Blue for RAISE layer
                         break;
                     case LAYER_POINTER:
-                        rgb_matrix_set_color(index, RGB_GREEN);   // Зелёный для POINTER слоя
+                        rgb_matrix_set_color(index, RGB_GREEN);   // Green for POINTER layer
                         break;
                     default:
-                        rgb_matrix_set_color(index, RGB_OFF);     // Отключаем подсветку для других слоев
+                        rgb_matrix_set_color(index, RGB_OFF);     // Turn off RGB for other layers
                         break;
                 }
             }
         }
     }
 }
-#endif // RGB_MATRIX_ENABLE
+#endif
