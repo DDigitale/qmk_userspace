@@ -146,10 +146,24 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         for (uint8_t j = 0; j < MATRIX_COLS; j++) {
             // Проверяем, активен ли слой для данной клавиши
             if (IS_LAYER_ON(active_layer)) {
-                // Получаем цвет для этой клавиши
-                uint8_t red = rgb_matrix_get_hsv()[0];
-                uint8_t green = rgb_matrix_get_hsv()[1];
-                uint8_t blue = rgb_matrix_get_hsv()[2];
+                // Здесь можно задать цвета для активных клавиш
+                uint8_t red, green, blue;
+
+                // Задаем цвета для активных слоев
+                switch (active_layer) {
+                    case LAYER_LOWER:
+                        red = 255; green = 255; blue = 0; // Желтый
+                        break;
+                    case LAYER_RAISE:
+                        red = 0; green = 0; blue = 255; // Синий
+                        break;
+                    case LAYER_POINTER:
+                        red = 0; green = 255; blue = 0; // Зеленый
+                        break;
+                    default:
+                        red = 0; green = 0; blue = 0; // Черный
+                        break;
+                }
 
                 // Включаем подсветку для активной клавиши
                 rgb_matrix_set_color(i * MATRIX_COLS + j, red, green, blue);
@@ -167,3 +181,4 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 #endif // RGB_MATRIX_ENABLE
+
