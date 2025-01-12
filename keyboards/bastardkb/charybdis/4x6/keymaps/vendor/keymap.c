@@ -125,17 +125,14 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         case LAYER_LOWER:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
             rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
-            rgb_matrix_set_brightness(100);
             break;
         case LAYER_RAISE:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
             rgb_matrix_sethsv_noeeprom(HSV_BLUE);
-            rgb_matrix_set_brightness(100);
             break;
         case LAYER_POINTER:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
             rgb_matrix_sethsv_noeeprom(HSV_GREEN);
-            rgb_matrix_set_brightness(100);
             break;
         default:
             rgb_matrix_reload_from_eeprom();
