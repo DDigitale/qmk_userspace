@@ -121,57 +121,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t active_layer = get_highest_layer(state);
 
-    // Сбросить все клавиши подсветки
-    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-    rgb_matrix_sethsv_noeeprom(HSV_BLACK);  // Сначала делаем все клавиши черными
-
-    // Подсветка для активного слоя
-    // switch (active_layer) {
-    //     case LAYER_LOWER:
-    //         rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
-    //         break;
-    //     case LAYER_RAISE:
-    //         rgb_matrix_sethsv_noeeprom(HSV_BLUE);
-    //         break;
-    //     case LAYER_POINTER:
-    //         rgb_matrix_sethsv_noeeprom(HSV_GREEN);
-    //         break;
-    //     default:
-    //         rgb_matrix_reload_from_eeprom();
-    //         break;
-    // }
-
-    // Включаем подсветку только для клавиш активного слоя
-    for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
-        for (uint8_t j = 0; j < MATRIX_COLS; j++) {
-            // Проверяем, активен ли слой для данной клавиши
-            if (IS_LAYER_ON(active_layer)) {
-                // Здесь можно задать цвета для активных клавиш
-                uint8_t red, green, blue;
-
-                // Задаем цвета для активных слоев
-                switch (active_layer) {
-                    case LAYER_LOWER:
-                        red = 255; green = 255; blue = 0; // Желтый
-                        break;
-                    case LAYER_RAISE:
-                        red = 0; green = 0; blue = 255; // Синий
-                        break;
-                    case LAYER_POINTER:
-                        red = 0; green = 255; blue = 0; // Зеленый
-                        break;
-                    default:
-                        red = 0; green = 0; blue = 0; // Черный
-                        break;
-                }
-
-                // Включаем подсветку для активной клавиши
-                rgb_matrix_set_color(i * MATRIX_COLS + j, red, green, blue);
-            } else {
-                // Отключаем подсветку для неактивной клавиши
-                rgb_matrix_set_color(i * MATRIX_COLS + j, 0, 0, 0);
-            }
-        }
+    switch (active_layer) {
+        case LAYER_LOWER:
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+            rgb_matrix_set_brightness(100);
+            break;
+        case LAYER_RAISE:
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+            rgb_matrix_sethsv_noeeprom(HSV_BLUE);
+            rgb_matrix_set_brightness(100);
+            break;
+        case LAYER_POINTER:
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+            rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+            rgb_matrix_set_brightness(100);
+            break;
+        default:
+            rgb_matrix_reload_from_eeprom();
+            break;
     }
 
     #ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
@@ -181,4 +149,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 #endif // RGB_MATRIX_ENABLE
+
+#ifdef RGB_MATRIX_ENABLE
+// Forward-declare this helper function since it is defined in rgb_matrix.c.
+void rgb_matrix_update_pwm_buffers(void);
+#endif
 
