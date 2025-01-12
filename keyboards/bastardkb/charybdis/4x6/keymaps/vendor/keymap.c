@@ -119,47 +119,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // clang-format on
 
 #ifdef RGB_MATRIX_ENABLE
-// Глобальная переменная для хранения яркости
-static uint8_t saved_brightness_level = 255;  // Яркость по умолчанию
-
-// Функция для сохранения яркости в базовом слое
-void save_brightness_in_base_layer(void) {
-    saved_brightness_level = rgb_matrix_get_val();  // Получаем текущий уровень яркости
-}
-
-// Обработчик изменения состояния слоев с подсветкой
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t active_layer = get_highest_layer(state);
 
-    // Интегрируем вашу логику подсветки для различных слоев
     switch (active_layer) {
-        case LAYER_BASE:
-            // Для базового слоя сохраняем яркость
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);  // Жёлтый для BASE слоя
-            save_brightness_in_base_layer();  // Сохраняем яркость из базового слоя
-            break;
         case LAYER_LOWER:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);  // Жёлтый для LOWER слоя
-            rgb_matrix_set_val(saved_brightness_level);  // Применяем сохранённую яркость
+            rgb_matrix_sethsv_noeeprom(HSV_CHARTREUSE);
             break;
         case LAYER_RAISE:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_BLUE);    // Синий для RAISE слоя
-            rgb_matrix_set_val(saved_brightness_level);  // Применяем сохранённую яркость
+            rgb_matrix_sethsv_noeeprom(HSV_CORAL);
             break;
         case LAYER_POINTER:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_GREEN);   // Зелёный для POINTER слоя
-            rgb_matrix_set_val(saved_brightness_level);  // Применяем сохранённую яркость
+            rgb_matrix_sethsv_noeeprom(HSV_MAGENTA);
             break;
         default:
             rgb_matrix_reload_from_eeprom();
             break;
     }
 
-    // Ваша оригинальная логика для автоматического включения режима снайпера на слое POINTER
     #ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
     charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
     #endif
@@ -167,3 +147,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 #endif // RGB_MATRIX_ENABLE
+
+#ifdef RGB_MATRIX_ENABLE
+// Forward-declare this helper function since it is defined in rgb_matrix.c.
+void rgb_matrix_update_pwm_buffers(void);
+#endif
