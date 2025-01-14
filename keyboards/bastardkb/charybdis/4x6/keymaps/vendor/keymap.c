@@ -16,10 +16,6 @@
  */
 #include QMK_KEYBOARD_H
 
-#ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
-#    include "timer.h"
-#endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
-
 enum charybdis_keymap_layers {
     LAYER_BASE = 0,
     LAYER_LOWER,
@@ -29,18 +25,6 @@ enum charybdis_keymap_layers {
 
 /** \brief Automatically enable sniping-mode on the pointer layer. */
 #define CHARYBDIS_AUTO_SNIPING_ON_LAYER LAYER_POINTER
-
-#ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
-static uint16_t auto_pointer_layer_timer = 0;
-
-#    ifndef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_TIMEOUT_MS
-#        define CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_TIMEOUT_MS 1000
-#    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_TIMEOUT_MS
-
-#    ifndef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD
-#        define CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD 8
-#    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD
-#endif     // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
 #define LOWER MO(LAYER_LOWER)
 #define RAISE MO(LAYER_RAISE)
@@ -53,6 +37,59 @@ static uint16_t auto_pointer_layer_timer = 0;
 #    define S_D_MOD KC_NO
 #    define SNIPING KC_NO
 #endif // !POINTING_DEVICE_ENABLE
+
+// Кастомные макросы для скобок
+enum custom_keycodes {
+    CUSTOM_LPRN = SAFE_RANGE,  // левая круглая скобка
+    CUSTOM_RPRN,               // правая круглая скобка
+    CUSTOM_LCBR,               // левая фигурная скобка
+    CUSTOM_RCBR,               // правая фигурная скобка
+    CUSTOM_LBRC,               // левая квадратная скобка
+    CUSTOM_RBRC,               // правая квадратная скобка
+};
+
+// Реализация кастомных макросов
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case CUSTOM_LPRN:
+            if (record->event.pressed) {
+                // Отправляем скобку (
+                send_unicode_string("(");
+            }
+            return false;
+        case CUSTOM_RPRN:
+            if (record->event.pressed) {
+                // Отправляем скобку )
+                send_unicode_string(")");
+            }
+            return false;
+        case CUSTOM_LCBR:
+            if (record->event.pressed) {
+                // Отправляем фигурную скобку {
+                send_unicode_string("{");
+            }
+            return false;
+        case CUSTOM_RCBR:
+            if (record->event.pressed) {
+                // Отправляем фигурную скобку }
+                send_unicode_string("}");
+            }
+            return false;
+        case CUSTOM_LBRC:
+            if (record->event.pressed) {
+                // Отправляем квадратную скобку [
+                send_unicode_string("[");
+            }
+            return false;
+        case CUSTOM_RBRC:
+            if (record->event.pressed) {
+                // Отправляем квадратную скобку ]
+                send_unicode_string("]");
+            }
+            return false;
+    }
+    return true;
+}
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -79,7 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        RGB_TOG, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,    KC_PPLS,   KC_P4,   KC_P5,   KC_P6, KC_PMNS, KC_PEQL,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-      RGB_RMOD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_PAST,   UC(0x005B),   KC_P2,   KC_P3, KC_PSLS, KC_PDOT,
+      RGB_RMOD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_PAST,   KC_P1,   KC_P2,   KC_P3, KC_PSLS, KC_PDOT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   XXXXXXX, XXXXXXX, _______,    XXXXXXX, _______,
                                            XXXXXXX, XXXXXXX,      KC_P0
