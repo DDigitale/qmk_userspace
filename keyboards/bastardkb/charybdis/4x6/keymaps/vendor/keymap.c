@@ -135,7 +135,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             break;
         case LAYER_MEDIA:
             rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_GOLD);
+            rgb_matrix_sethsv_noeeprom(HSV_TURQUOISE);
             break;
         default:
             rgb_matrix_reload_from_eeprom();
