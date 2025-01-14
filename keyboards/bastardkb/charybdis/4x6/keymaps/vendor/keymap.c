@@ -38,59 +38,6 @@ enum charybdis_keymap_layers {
 #    define SNIPING KC_NO
 #endif // !POINTING_DEVICE_ENABLE
 
-// Кастомные макросы для скобок
-enum custom_keycodes {
-    CUSTOM_LPRN = SAFE_RANGE,  // левая круглая скобка
-    CUSTOM_RPRN,               // правая круглая скобка
-    CUSTOM_LCBR,               // левая фигурная скобка
-    CUSTOM_RCBR,               // правая фигурная скобка
-    CUSTOM_LBRC,               // левая квадратная скобка
-    CUSTOM_RBRC,               // правая квадратная скобка
-};
-
-// Реализация кастомных макросов
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case CUSTOM_LPRN:
-            if (record->event.pressed) {
-                // Отправляем скобку (
-                send_unicode_string("(");
-            }
-            return false;
-        case CUSTOM_RPRN:
-            if (record->event.pressed) {
-                // Отправляем скобку )
-                send_unicode_string(")");
-            }
-            return false;
-        case CUSTOM_LCBR:
-            if (record->event.pressed) {
-                // Отправляем фигурную скобку {
-                send_unicode_string("{");
-            }
-            return false;
-        case CUSTOM_RCBR:
-            if (record->event.pressed) {
-                // Отправляем фигурную скобку }
-                send_unicode_string("}");
-            }
-            return false;
-        case CUSTOM_LBRC:
-            if (record->event.pressed) {
-                // Отправляем квадратную скобку [
-                send_unicode_string("[");
-            }
-            return false;
-        case CUSTOM_RBRC:
-            if (record->event.pressed) {
-                // Отправляем квадратную скобку ]
-                send_unicode_string("]");
-            }
-            return false;
-    }
-    return true;
-}
-
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
