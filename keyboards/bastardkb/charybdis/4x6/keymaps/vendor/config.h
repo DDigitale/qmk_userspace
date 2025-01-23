@@ -19,7 +19,7 @@
 #ifdef VIA_ENABLE
 /* VIA configuration. */
 #    define DYNAMIC_KEYMAP_LAYER_COUNT 5
-#    define RGBLIGHT_DEFAULT_VAL = 88
+#    define RGBLIGHT_DEFAULT_VAL = 54
 #endif // VIA_ENABLE
 
 #ifndef __arm__
