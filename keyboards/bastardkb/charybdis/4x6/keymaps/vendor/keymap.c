@@ -118,7 +118,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // clang-format on
 #ifdef RGB_MATRIX_ENABLE
 layer_state_t layer_state_set_user(layer_state_t state) {
-    uint8_t active_layer = get_highest_layer(state);
+    // uint8_t active_layer = get_highest_layer(state);
 
     // switch (active_layer) {
     //     case LAYER_LOWER:
