@@ -120,27 +120,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t active_layer = get_highest_layer(state);
 
-    switch (active_layer) {
-        case LAYER_LOWER:
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
-            break;
-        case LAYER_RAISE:
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_BLUE);
-            break;
-        case LAYER_POINTER:
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_GREEN);
-            break;
-        case LAYER_MEDIA:
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_TURQUOISE);
-            break;
-        default:
-            rgb_matrix_reload_from_eeprom();
-            break;
-    }
+    // switch (active_layer) {
+    //     case LAYER_LOWER:
+    //         rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    //         rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+    //         break;
+    //     case LAYER_RAISE:
+    //         rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    //         rgb_matrix_sethsv_noeeprom(HSV_BLUE);
+    //         break;
+    //     case LAYER_POINTER:
+    //         rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    //         rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+    //         break;
+    //     case LAYER_MEDIA:
+    //         rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    //         rgb_matrix_sethsv_noeeprom(HSV_TURQUOISE);
+    //         break;
+    //     default:
+    //         rgb_matrix_reload_from_eeprom();
+    //         break;
+    // }
 
     #ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
     charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
